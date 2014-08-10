@@ -1,4 +1,25 @@
-%input#new-todo(placeholder="What needs to be done?" autofocus="" )
-%ul
-  -@lists.each_with_index do |item, index|
-    %li #{item.name}
+%section#todoapp
+  %header#header
+    %input#new-todo(placeholder="What needs to be done?" autofocus)
+    %section#main(style="display: block;")
+      %input#toggle-all(type="checkbox")
+      %label(for="toggle-all") Mark all as complete
+      %ul#todo-list
+        -@lists.each_with_index do |item, index|
+          %li
+            .view
+              %input.toggle(type="checkbox")
+              %label #{item.name}
+              %button.destroy
+
+%footer#footer(style="display: block;")
+  %span#todo-count
+    %strong 1
+    item left
+  %ul#filters
+    %li
+      %a.selected(href="#/all") All
+    %li
+      %a(href="#/active") Active
+    %li
+      %a(href="#/completed") Completed
