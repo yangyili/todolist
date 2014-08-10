@@ -1,0 +1,4 @@
+%input#new-todo(placeholder="What needs to be done?" autofocus="" )
+%ul
+  -@lists.each_with_index do |item, index|
+    %li #{item.name}
