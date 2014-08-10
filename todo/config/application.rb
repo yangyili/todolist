@@ -20,5 +20,6 @@ module Todo
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.secret_key_base = "a40a23e120f11a93f0cd7524f8e2d44b58e1b6e8e131ef8aa2a4571a1d14271e1b9cc5b0523548b7c12a58d626e3b1078976ae3cc81a977ee01a7294b4ad44ff"
+    config.generators.helper = false
   end
 end
