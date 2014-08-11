@@ -6,7 +6,7 @@
       %label(for="toggle-all") Mark all as complete
       %ul#todo-list
         -@lists.each_with_index do |item, index|
-          %li
+          %li(class="#{item.state == 1 ? 'completed' : ''}")
             .view
               %input.toggle(type="checkbox")
               %label #{item.name}
@@ -23,3 +23,4 @@
       %a(href="#/active") Active
     %li
       %a(href="#/completed") Completed
+  %button#clear-completed Clear completed (1)
