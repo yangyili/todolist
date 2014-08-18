@@ -6,12 +6,11 @@
       %label(for="toggle-all") Mark all as complete
       %ul#todo-list
         -@lists.each_with_index do |item, index|
-          %li(class="#{item.state == 1 ? 'completed' : ''}")
+          %li(class="#{item.state == 1 ? 'completed' : ''}" item_id = '#{item.id}')
             .view
               %input.toggle(type="checkbox")
               %label #{item.name}
               %button.destroy
-
 %footer#footer(style="display: block;")
   %span#todo-count
     %strong 1

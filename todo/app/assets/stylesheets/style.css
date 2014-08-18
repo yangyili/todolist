@@ -299,7 +299,6 @@ label[for='toggle-all'] {
     padding: 0 15px;
     position: absolute;
     right: 0;
-    bottom: -31px;
     left: 0;
     height: 20px;
     z-index: 1;
@@ -542,7 +541,7 @@ hr {
 @media (min-width: 899px) {
     .learn-bar {
         width: auto;
-        margin: 0 0 0 300px;
+        margin: 0;
         position: relative;
     }
 
@@ -552,16 +551,20 @@ hr {
 
     .learn-bar #todoapp {
         width: 550px;
-        margin: 130px auto 40px auto;
+        margin: 40px auto;
     }
 
     .learn-bar #footer {
         width: 500px;
-        margin: auto 40px auto 222px;
+        margin: -30px auto 0;
     }
 }
 
 #main,
 #footer {
+    display: none;
+}
+
+.none {
     display: none;
 }

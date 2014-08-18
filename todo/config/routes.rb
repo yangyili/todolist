@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   get '/list' => 'todo#list'
+  post '/works/' => 'todo#add_work'
+  put '/works/:id' => 'todo#update_work'
+  post '/works/state' => 'todo#update_all_work'
+  delete '/works/:id' => 'todo#delete_work'
+  post '/works/completed' => 'todo#delete_completed_work'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
