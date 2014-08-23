@@ -11,6 +11,7 @@
               %input.toggle(type="checkbox")
               %label #{item.name}
               %button.destroy
+            %input.edit
 %footer#footer(style="display: block;")
   %span#todo-count
     %strong 1
@@ -23,3 +24,6 @@
     %li
       %a(href="#/completed") Completed
   %button#clear-completed Clear completed (1)
+%form(action="/works/upload_file" method="post" )
+  %input(type="file" )
+%input(type="submit")

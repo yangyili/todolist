@@ -19,6 +19,11 @@ class TaskList < ActiveRecord::Base
     update_all("state = #{state}")
   end
 
+  def self.update_work_name(id, name)
+    work = find(id)
+    work.update_attributes(:name => name) if work.present?
+  end
+
   def self.delete_work(id)
     work = find(id)
     work.destroy if work.present?

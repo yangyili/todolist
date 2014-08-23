@@ -1,13 +1,12 @@
 $(document).ready(function(){
     TodoList.init();
-    TodoList.init_work_state();
 });
 var TodoList = function() {
-   var ENTER_KEY = 13;
+    var ENTER_KEY = 13;
 
     function init_work_style() {
-        var $toggle_all_input = $('#toggle-all');
         var $todo_list_li = $('#todo-list li');
+        var $toggle_all_input = $('#toggle-all');
         var all_work_num = $todo_list_li.length;
         var completed_num = $('.completed').length;
 
@@ -21,18 +20,32 @@ var TodoList = function() {
     }
 
     function init_work_state() {
-        $('#todo-list li').each(function () {
+        var $todo_list_li = $('#todo-list li');
+        $todo_list_li.each(function () {
             if ($(this).hasClass('completed')) {
                 $(this).find('[type="checkbox"]').prop('checked', 'checked');
+            } else {
+                $(this).removeProp('checked');
             }
         });
 
     }
 
+    function init_work_number() {
+        var $todo_list_li = $('#todo-list li');
+        var all_work_length = $todo_list_li.length;
+        var active_work_length = $todo_list_li.not('.completed').length;
+        var completed_work_length = all_work_length - active_work_length;
+        $('#todo-count').find('strong').text(active_work_length);
+        $('#clear-completed').text('Clear completed (' + completed_work_length + ')');
+    }
+
     function bind_keyup_for_add_item() {
         $('#new-todo').unbind('keyup').on('keyup', function(event){
             if (event.keyCode == ENTER_KEY) {
-                add_work(this);
+                if (!is_work_repeat($(this).val().trim)) {
+                    add_work(this);
+                }
             }
         });
     }
@@ -64,6 +77,34 @@ var TodoList = function() {
     function bind_click_for_destroy_all_work() {
         $('#clear-completed').unbind('click').bind('click', function () {
             clear_all_work();
+        });
+    }
+
+    function bind_edit_work() {
+        var $todolist_li = $('#todo-list li');
+        $todolist_li.find('.view').unbind('dblclick').bind('dblclick', function () {
+            $(this).parents('li').addClass('editing');
+            $(this).next('.edit').val($(this).text().trim());
+        });
+        $todolist_li.find('.edit').unbind('keyup').bind('keyup', function (event) {
+            if (event.keyCode == ENTER_KEY) {
+                var work_id = $(this).parents('li').attr('item_id');
+                $.ajax({
+                    url: '/works/'+work_id+'/edit',
+                    type: 'PUT',
+                    data: {name: $(this).val().trim()},
+                    success: function (data) {
+                        if (data == 'ok') {
+//                            $(this).parents('li').removeClass('editing');
+                            window.location.reload();
+                            console.log('edit success');
+                        }
+                    },
+                    error: function () {
+                        console.log('edit error');
+                    }
+                });
+            }
         });
     }
 
@@ -132,15 +173,15 @@ var TodoList = function() {
     }
 
     function filter_work($this) {
+        var $todo_list_li = $('#todo-list li');
         $('#filters li').find('a').removeClass('selected');
         $this.addClass('selected');
         var state = $this.text().trim();
-        var $li = $('#todo-list li');
-        $li.addClass('none');
+        $todo_list_li.addClass('none');
         if (state == 'All') {
-            $li.removeClass('none');
+            $todo_list_li.removeClass('none');
         } else if (state == 'Active') {
-            $li.not('.completed').removeClass('none');
+            $todo_list_li.not('.completed').removeClass('none');
         } else if (state == 'Completed') {
             $('.completed').removeClass('none');
         }
@@ -167,7 +208,8 @@ var TodoList = function() {
     }
 
     function handle_work_success(data) {
-        $('#todoapp').replaceWith($(data).find('#todoapp'));
+//        $('#todoapp').replaceWith($(data).find('#todoapp'));
+        window.location.reload();
         TodoList.init();
     }
 
@@ -187,19 +229,31 @@ var TodoList = function() {
         });
     }
 
+    function is_work_repeat(work) {
+        $.ajax({
+            url: '/works',
+            type: 'GET',
+            success: function (data) {
+                data.each(function (item) {
+                    return item == work;
+                });
+            }
+        })
+    }
+
 
     return {
        init: function () {
+           init_work_state();
            init_work_style();
+           init_work_number();
            bind_keyup_for_add_item();
            bind_click_for_destroy_item();
            bind_click_for_checked_item();
            bind_click_for_select_all();
            bind_click_for_filter();
            bind_click_for_destroy_all_work();
-       },
-       init_work_state: function () {
-           init_work_state();
+           bind_edit_work();
        }
-   };
+    };
 }();
